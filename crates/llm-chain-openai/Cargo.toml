@@ -21,7 +21,7 @@ serde = { version = "1.0.164" }
 strum = "0.25"
 strum_macros = "0.24"
 thiserror = "1.0.40"
-tiktoken-rs = { version = "0.4.2", features = ["async-openai"] }
+tiktoken-rs = { version = "0.5.0", features = ["async-openai"] }
 tokio = "1.28.2"
 
 [dev-dependencies]
