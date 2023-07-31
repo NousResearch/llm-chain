@@ -20,7 +20,7 @@ llm-chain = { path = "../llm-chain", version = "0.12.3", default-features = fals
 serde = { version = "1.0.164" }
 strum = "0.25"
 strum_macros = "0.24"
-thiserror = "1.0.40"
+thiserror = "1.0.44"
 tiktoken-rs = { version = "0.4.2", features = ["async-openai"] }
 tokio = "1.28.2"
 
