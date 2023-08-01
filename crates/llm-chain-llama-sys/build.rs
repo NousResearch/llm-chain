@@ -24,6 +24,8 @@ fn main() {
 
     // Check if CUDA is enabled for cuBlAS
     let cuda_enabled = env::var("CARGO_FEATURE_CUDA").is_ok();
+    let avx2_enabled = env::var("CARGO_FEATURE_AVX2").is_ok();
+    let metal_enabled = env::var("CARGO_FEATURE_METAL").is_ok();
 
     if env::var("LLAMA_DONT_GENERATE_BINDINGS").is_ok() {
         let _: u64 = std::fs::copy(
@@ -32,17 +34,19 @@ fn main() {
         )
         .expect("Failed to copy bindings.rs");
     } else {
-        let bindings_builder = bindgen::Builder::default()
+        let mut bindings_builder = bindgen::Builder::default()
             .header("wrapper.h")
             .clang_args(&["-x", "c++"])
             .clang_arg("-I./llama.cpp");
-        let bindings = if cuda_enabled {
-            bindings_builder.clang_arg("-DGGML_USE_CUBLAS")
-        } else {
-            bindings_builder
+        if cuda_enabled {
+            bindings_builder = bindings_builder.clang_arg("-DGGML_USE_CUBLAS")
+        };
+        if metal_enabled {
+            bindings_builder = bindings_builder.clang_arg("-DGGML_USE_METAL")
         }
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
-        .generate();
+        let bindings = bindings_builder
+            .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+            .generate();
 
         match bindings {
             Ok(b) => {
@@ -90,6 +94,12 @@ fn main() {
     if cuda_enabled {
         // If CUDA feature is enabled, build with cuBlAS to enable GPU acceleration
         code.arg("-DLLAMA_CUBLAS=ON");
+    }
+    if metal_enabled {
+        code.arg("-DLLAMA_METAL=ON");
+    }
+    if avx2_enabled {
+        code.arg("-DLLAMA_AVX2=ON");
     }
     let code = code.status().expect("Failed to generate build script");
     if code.code() != Some(0) {
