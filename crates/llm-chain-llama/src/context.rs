@@ -70,7 +70,7 @@ impl From<ContextParams> for llama_context_params {
             n_batch: params.n_batch,
             n_gpu_layers: params.n_gpu_layers,
             main_gpu: params.main_gpu,
-            tensor_split: params.tensor_split,
+            tensor_split:  params.tensor_split,
             seed: params.seed,
             f16_kv: params.f16_kv,
             logits_all: false,
