@@ -25,3 +25,8 @@ tokio = "1.28.2"
 
 [dev-dependencies]
 tokio = { version = "1.28.2", features = ["macros", "rt"] }
+
+[features]
+cuda = ["llm-chain-llama-sys/cuda"]
+avx2 = ["llm-chain-llama-sys/avx2"]
+metal = ["llm-chain-llama-sys/metal"]
