@@ -45,6 +45,7 @@ fn main() {
         println!("cargo:rustc-link-lib=dylib=cublas");
         println!("cargo:rustc-link-lib=dylib=cublasLt");
         println!("cargo:rerun-if-env-changed=CUDA_LIBRARY_PATH");
+        println!("cargo:rerun-if-env-changed=CUDA_PATH");
     }
 
     if env::var("LLAMA_DONT_GENERATE_BINDINGS").is_ok() {
