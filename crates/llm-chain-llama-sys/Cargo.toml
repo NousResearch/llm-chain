@@ -21,3 +21,5 @@ bindgen = "0.66"
 
 [features]
 cuda = []
+avx2 = []
+metal = []
