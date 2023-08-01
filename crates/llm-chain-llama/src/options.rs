@@ -122,10 +122,12 @@ pub(crate) fn get_executor_initial_opts(
     let model = opt_extract!(opt, model, Model)?;
     let max_context_size = opt_extract!(opt, max_context_size, MaxContextSize)?;
     let num_gpu_layers = opt_extract!(opt, num_gpu_layers, NumGpuLayers)?;
+    let n_batch = opt_extract!(opt, n_batch, NBatch)?;
 
     let mut cp = ContextParams::new();
     cp.n_ctx = *max_context_size as i32;
     cp.n_gpu_layers = *num_gpu_layers;
+    cp.n_batch = *n_batch as i32;
 
     Ok((model.to_path(), cp))
 }
