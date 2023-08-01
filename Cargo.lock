@@ -829,6 +829,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "cuda-config"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ee74643f7430213a1a78320f88649de309b20b80818325575e393f848f79f5d"
+dependencies = [
+ "glob",
+]
+
+[[package]]
 name = "darling"
 version = "0.14.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1802,6 +1811,7 @@ name = "llm-chain-llama-sys"
 version = "0.12.3"
 dependencies = [
  "bindgen",
+ "cuda-config",
 ]
 
 [[package]]

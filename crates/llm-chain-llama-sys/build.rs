@@ -27,6 +27,24 @@ fn main() {
     let avx2_enabled = env::var("CARGO_FEATURE_AVX2").is_ok();
     let metal_enabled = env::var("CARGO_FEATURE_METAL").is_ok();
 
+    if cuda_enabled {
+        use cuda_config::*;
+
+        if cfg!(target_os = "windows") {
+            println!(
+                "cargo:rustc-link-search=native={}",
+                find_cuda_windows().display()
+            );
+        } else {
+            for path in find_cuda() {
+                println!("cargo:rustc-link-search=native={}", path.display());
+            }
+        };
+    
+        println!("cargo:rustc-link-lib=dylib=cudart_static");
+        println!("cargo:rerun-if-env-changed=CUDA_LIBRARY_PATH");
+    }
+
     if env::var("LLAMA_DONT_GENERATE_BINDINGS").is_ok() {
         let _: u64 = std::fs::copy(
             "src/bindings.rs",
