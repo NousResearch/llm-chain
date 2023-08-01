@@ -1,6 +1,6 @@
 use std::{
     ffi::{CStr, CString},
-    ptr::null_mut,
+    ptr::{null_mut, null},
 };
 
 use crate::options::LlamaInvocation;
@@ -29,7 +29,7 @@ pub struct ContextParams {
     pub n_batch: i32,
     pub n_gpu_layers: i32,
     pub main_gpu: i32,
-    pub tensor_split: [f32; LLAMA_MAX_DEVICES],
+    pub tensor_split: Option<[f32; LLAMA_MAX_DEVICES]>,
     pub seed: u32,
     pub f16_kv: bool,
     pub vocab_only: bool,
@@ -39,6 +39,9 @@ pub struct ContextParams {
     pub low_vram: bool,
     pub rope_freq_base: f32,
     pub rope_freq_scale: f32,
+    pub mul_mat_q: bool,
+    pub n_gqa: i32,
+    pub rms_norm_eps: f32,
 }
 
 impl ContextParams {
@@ -67,7 +70,7 @@ impl From<ContextParams> for llama_context_params {
             n_batch: params.n_batch,
             n_gpu_layers: params.n_gpu_layers,
             main_gpu: params.main_gpu,
-            tensor_split: params.tensor_split,
+            tensor_split: null(),
             seed: params.seed,
             f16_kv: params.f16_kv,
             logits_all: false,
@@ -80,6 +83,9 @@ impl From<ContextParams> for llama_context_params {
             low_vram: params.low_vram,
             rope_freq_base: params.rope_freq_base,
             rope_freq_scale: params.rope_freq_scale,
+            mul_mat_q: params.mul_mat_q,
+            n_gqa: params.n_gqa,
+            rms_norm_eps: params.rms_norm_eps
         }
     }
 }
@@ -91,7 +97,7 @@ impl From<llama_context_params> for ContextParams {
             n_batch: params.n_batch,
             n_gpu_layers: params.n_gpu_layers,
             main_gpu: params.main_gpu,
-            tensor_split: params.tensor_split,
+            tensor_split: None,
             seed: params.seed,
             f16_kv: params.f16_kv,
             vocab_only: params.vocab_only,
@@ -101,6 +107,9 @@ impl From<llama_context_params> for ContextParams {
             low_vram: params.low_vram,
             rope_freq_base: params.rope_freq_base,
             rope_freq_scale: params.rope_freq_scale,
+            mul_mat_q: params.mul_mat_q,
+            n_gqa: params.n_gqa,
+            rms_norm_eps: params.rms_norm_eps
         }
     }
 }
