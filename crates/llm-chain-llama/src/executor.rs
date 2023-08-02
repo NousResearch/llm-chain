@@ -87,18 +87,28 @@ impl Executor {
                 // Embd contains the prompt and the completion. The longer the prompt, the shorter the completion.
                 let mut embd = tokenized_input.clone();
 
-                // Evaluate the prompt in full.
-                bail!(
-                    context
-                        .llama_eval(
-                            tokenized_input.as_slice(),
-                            tokenized_input.len() as i32,
-                            0,
-                            &input,
-                        )
-                        .map_err(|e| ExecutorError::InnerError(e.into())),
-                    sender
-                );
+                // Evaluate the prompt in full (batching by n_batch).
+                let mut evaled = 0;
+                let mut n_past = 0_usize;
+                while evaled < embd.len() {
+                    let mut n_eval = embd.len() - evaled;
+                    if n_eval > context_params.n_batch as usize {
+                        n_eval = context_params.n_batch as usize;
+                    }
+                    bail!(
+                        context
+                            .llama_eval(
+                                &tokenized_input.as_slice()[evaled..evaled+n_eval],
+                                n_eval as i32,
+                                n_past as i32,
+                                &input,
+                            )
+                            .map_err(|e| ExecutorError::InnerError(e.into())),
+                        sender
+                    );
+                    n_past += n_eval;
+                    evaled += context_params.n_batch as usize;
+                }
 
                 let mut n_remaining = context_size - tokenized_input.len();
                 let mut n_used = tokenized_input.len() - 1;
