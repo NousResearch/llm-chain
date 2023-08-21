@@ -19,7 +19,7 @@ async-trait = "0.1.68"
 llm-chain-llama-sys = { path = "../llm-chain-llama-sys", version = "0.12" }
 llm-chain = { path = "../llm-chain", version = "0.12.3" }
 serde = { version = "1.0.164", features = ["derive"] }
-thiserror = "1.0.40"
+thiserror = "1.0.47"
 lazy_static = "1.4.0"
 tokio = "1.28.2"
 

@@ -18,7 +18,7 @@ llm = "0.1.1"
 llm-chain = { path = "../llm-chain", version = "0.12.3", default-features = false }
 rand = "0.8.5"
 serde = { version = "1.0.164", features = ["derive"] }
-thiserror = "1.0.40"
+thiserror = "1.0.47"
 
 [dev-dependencies]
 tokio = { version = "1.28.2", features = ["macros", "rt"] }
